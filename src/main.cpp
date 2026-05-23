@@ -1,5 +1,6 @@
 #include <iostream>
 
 int main(int, char**){
-    std::cout << "Cxx version: " << __cplusplus;
+    std::cout << __cplusplus;
+    return EXIT_SUCCESS;
 }
