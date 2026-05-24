@@ -4,6 +4,7 @@
 #include <iostream>
 
 // function prototype
+void processInput(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow *window, int w, int h);
 
 const unsigned int SCR_WIDTH = 900;
@@ -47,6 +48,8 @@ int main(int, char **) {
   // main while loop
   while (!glfwWindowShouldClose(window)) {
 
+    processInput(window);
+    
     // specify the color of the background
     glClearColor(0.07f, 0.13f, 0.2f, 1.0f);
 
@@ -70,4 +73,10 @@ int main(int, char **) {
 
 void framebuffer_size_callback(GLFWwindow *window, int w, int h) {
   glViewport(0, 0, w, h);
+}
+
+void processInput(GLFWwindow* window){
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
+        glfwSetWindowShouldClose(window, true);
+    }
 }
