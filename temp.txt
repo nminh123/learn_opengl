@@ -1,0 +1,123 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
+#include <iostream>
+
+// function prototype
+#pragma region function prototype
+void processInput(GLFWwindow *window);
+void framebuffer_size_callback(GLFWwindow *window, int w, int h);
+#pragma endregion
+
+int main(int, char **) {
+  // INITALIZE GLFW
+  glfwInit();
+  // TELL GLFW THAT WE ARE USING THE OPENGL VERSION 4.1
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+  // glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+  // TELLING GLFW THAT WE USING CORE PROFILE
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef __APPLE__
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
+  GLfloat vertices[] = {-.5f, -.5f * float(sqrt(3)) / 3,     0.0f,
+                        .5f,  -.5f * float(sqrt(3)) / 3,     0.0f,
+                        0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f};
+
+  const unsigned int SCR_WIDTH = 800;
+  const unsigned int SCR_HEIGHT = 600;
+  // Create window with size
+  GLFWwindow *window = glfwCreateWindow(
+      SCR_WIDTH, SCR_HEIGHT, "My First OpenGL Application", nullptr, nullptr);
+
+  if (window == nullptr) {
+    std::cout << "Can not create window" << std::endl;
+    glfwTerminate();
+    return -1;
+  }
+
+  // Introduce window to current context
+  glfwMakeContextCurrent(window);
+  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    std::cout << "Failed to initialize GLAD" << std::endl;
+    return -1;
+  }
+
+  glViewport(0, 0, 900, 600);
+
+  /*
+  Buffer là gì? Khi chuyển thông tin (data) từ cpu -> gpu khá chậm nên phải gom
+  nhiều data gửi luôn một lần. Cái đó gọi là buffer VBO: Vertex Buffer Object
+
+  VAO: Vertex Array Object
+  */
+  GLuint VAO, VBO;
+  glGenVertexArrays(1, &VAO);
+//   glGenBuffers(1, &VBO);
+
+  glBindVertexArray(VAO);
+
+//   // copy our vertices array in a buffer for OpenGL to use
+//   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+  // then set the vertex attributes pointers
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glEnableVertexAttribArray(0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+
+  // main while loop
+  while (!glfwWindowShouldClose(window)) {
+
+    processInput(window);
+
+    // specify the color of the background
+    glClearColor(0.07f, 0.13f, 0.2f, 1.0f);
+
+    // clean the back buffer and assing the new color to it
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // use our shader program when we want to render an object
+    // glUseProgram(shaderProgram);
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    //glDrawElements
+
+    // swap the back buffer with the front buffer
+    glfwSwapBuffers(window);
+
+    // Take care of all the glfw events
+    glfwPollEvents();
+  }
+
+  glDeleteVertexArrays(1, &VAO);
+  glDeleteBuffers(1, &VBO);
+//   glDeleteProgram(shaderProgram);
+
+  // Delete the window before ending program
+  glfwDestroyWindow(window);
+  // Terminate the GLFW before ending program
+  glfwTerminate();
+
+  return EXIT_SUCCESS;
+}
+
+// Param thứ 2 của phương thức glfwSetFramebufferSizeCallback
+// typedef void (*)(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow *window, int w, int h) {
+  glViewport(0, 0, w, h);
+}
+
+void processInput(GLFWwindow *window) {
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS ||
+      glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+    glfwSetWindowShouldClose(window, true);
+  }
+}
