@@ -9,6 +9,11 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS src/*.cpp src/*.c)
 add_executable(app ${SRC_FILES})
 
 target_include_directories(app PRIVATE ${CMAKE_SOURCE_DIR}/include)
+file(COPY
+    "${CMAKE_SOURCE_DIR}/Resources Files/Shaders/"
+    DESTINATION
+    "${CMAKE_BINARY_DIR}"
+)
 
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
