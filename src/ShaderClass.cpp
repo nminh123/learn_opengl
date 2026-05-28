@@ -11,7 +11,8 @@ std::string get_file_contents(const char *fileName) {
     in.close();
     return contents;
   }
-  throw(errno);
+  std::cerr << "FAILED TO OPEN FILE: " << fileName << std::endl;
+  throw std::runtime_error("shader file not found");
 }
 
 Shader::Shader(const char *vertexFile, const char *fragmentFile) {
@@ -48,10 +49,6 @@ Shader::Shader(const char *vertexFile, const char *fragmentFile) {
 #pragma endregion
 }
 
-void Shader::Active() {
-    glUseProgram(ID);
-}
+void Shader::Active() { glUseProgram(ID); }
 
-void Shader::Delete() {
-    glDeleteProgram(ID);
-}
+void Shader::Delete() { glDeleteProgram(ID); }
