@@ -10,7 +10,7 @@ add_executable(app ${SRC_FILES})
 
 target_include_directories(app PRIVATE ${CMAKE_SOURCE_DIR}/include)
 file(COPY
-    "${CMAKE_SOURCE_DIR}/Resources Files/Shaders/"
+    "${CMAKE_SOURCE_DIR}/Resources Files/"
     DESTINATION
     "${CMAKE_BINARY_DIR}"
 )
