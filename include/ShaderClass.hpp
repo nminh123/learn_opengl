@@ -3,9 +3,6 @@
 
 #include <glad/glad.h>
 #include <cerrno>
-#include <fstream>
-#include <iostream>
-#include <sstream>
 #include <string>
 
 std::string get_file_contents(const char *fileName);

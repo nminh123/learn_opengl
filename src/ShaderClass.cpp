@@ -1,4 +1,6 @@
 #include "ShaderClass.hpp"
+#include <fstream>
+#include <iostream>
 
 std::string get_file_contents(const char *fileName) {
   std::ifstream in(fileName, std::ios::binary);
